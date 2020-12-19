@@ -61,7 +61,6 @@ noble.on('discover', (peripheral) => {
     bleacon.proximity = proximity;
 
     if (major === 0 && proximity === 'near') {
-      console.log(bleacon);
       citizenId = minor;
     };
   }
@@ -81,7 +80,7 @@ async function showCitizen(id) {
   try {
     const data = await request('https://uitc.pominwu.org/', `
       query {
-        citizen(id: "${id}") {
+        citizen(id: "420") {
           id
           name
           infections {
@@ -123,7 +122,7 @@ async function showCitizen(id) {
   
     showText(data.citizen.name);
 
-    const infection = _.sample(data.infections);
+    const infection = _.sample(data.citizen.infections);
     if (infection) showText(_.get(infection, ['pathogen', 'name']));
   } catch (err) {
     showText('Not Found');
@@ -138,7 +137,7 @@ async function loop() {
       await showCitizen(citizenId);
       citizenId = null;
     } else {
-      // console.log(await terminalImage.file('edm.jpg'));
+      console.log(await terminalImage.file('edm.jpg'));
     }
 
     await new Promise((resolve) => setTimeout(resolve, 4000));
