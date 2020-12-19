@@ -5,7 +5,7 @@ const terminalImage = require('terminal-image');
 noble.on('stateChange', function(state) {
   console.log('on -> stateChange: ' + state);
   if (state === 'poweredOn') {
-    noble.startScanning();
+    noble.startScanning([], true);
   } else {
     noble.stopScanning();
   }
