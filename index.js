@@ -1,4 +1,5 @@
 const figlet = require('figlet');
+const chalk = require('chalk');
 const noble = require('@abandonware/noble');
 const bleno = require('./index');
 const terminalImage = require('terminal-image');
@@ -128,7 +129,6 @@ async function showCitizen(id) {
 async function loop() {
   try {
     console.clear();
-
     if (citizenId !== null) {
       await showCitizen(citizenId);
       citizenId = null;
