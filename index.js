@@ -59,7 +59,9 @@ noble.on('discover', (peripheral) => {
     bleacon.rssi = rssi;
     bleacon.accuracy = accuracy;
     bleacon.proximity = proximity;
-    if (major === 0 && measuredPower > -70) {
+
+    if (major === 0 && proximity === 'near') {
+      console.log(bleacon);
       citizenId = minor;
     };
   }
@@ -136,7 +138,7 @@ async function loop() {
       await showCitizen(citizenId);
       citizenId = null;
     } else {
-      console.log(await terminalImage.file('edm.jpg'));
+      // console.log(await terminalImage.file('edm.jpg'));
     }
 
     await new Promise((resolve) => setTimeout(resolve, 4000));
