@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const figlet = require('figlet');
 const chalk = require('chalk');
 const noble = require('@abandonware/noble');
@@ -59,9 +60,7 @@ noble.on('discover', (peripheral) => {
     bleacon.accuracy = accuracy;
     bleacon.proximity = proximity;
 
-    console.log(bleacon);
-
-    citizenId = minor;
+    if (minor === 0 && measuredPower > -70) citizenId = minor;
   }
 });
 
@@ -120,6 +119,9 @@ async function showCitizen(id) {
     `);
   
     showText(data.citizen.name);
+
+    const infection = _.sample(data.infections);
+    if (infection) showText(_.get(infection, ['pathogen', 'name']));
   } catch (err) {
     showText('Not Found');
     // empty
