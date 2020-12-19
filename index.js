@@ -11,6 +11,38 @@ const APPLE_COMPANY_IDENTIFIER = 0x004c; // https://www.bluetooth.org/en-us/spec
 const IBEACON_TYPE = 0x02;
 const EXPECTED_IBEACON_DATA_LENGTH = 0x15;
 
+// var opts = {
+//   //Picture related
+//   width: 1280,
+//   height: 720,
+//   quality: 100,
+//   // Number of frames to capture
+//   // More the frames, longer it takes to capture
+//   // Use higher framerate for quality. Ex: 60
+//   frames: 60,
+//   //Delay in seconds to take shot
+//   //if the platform supports miliseconds
+//   //use a float (0.1)
+//   //Currently only on windows
+//   delay: 0,
+//   //Save shots in memory
+//   saveShots: true,
+//   // [jpeg, png] support varies
+//   // Webcam.OutputTypes
+//   output: "jpeg",
+//   //Which camera to use
+//   //Use Webcam.list() for results
+//   //false for default device
+//   device: false,
+//   // [location, buffer, base64]
+//   // Webcam.CallbackReturnTypes
+//   callbackReturn: "location",
+//   //Logging
+//   verbose: false
+// };
+
+// const Webcam = NodeWebcam.create(opts);
+
 let citizenId = null;
 
 noble.on('stateChange', function(state) {
@@ -67,7 +99,7 @@ noble.on('discover', (peripheral) => {
 });
 
 function showText(text) {
-  console.log(chalk.red(figlet.textSync(text, {
+  console.log(chalk.magenta(figlet.textSync(text, {
     font: 'Ghost',
     horizontalLayout: 'default',
     verticalLayout: 'default',

@@ -11,6 +11,7 @@
     "graphql": "^15.4.0",
     "graphql-request": "^3.4.0",
     "lodash": "^4.17.20",
+    "node-webcam": "^0.6.4",
     "terminal-image": "^1.2.1"
   },
   "devDependencies": {},
