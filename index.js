@@ -65,13 +65,13 @@ noble.on('discover', (peripheral) => {
 });
 
 function showText(text) {
-  console.log(figlet.textSync(text, {
+  console.log(chalk.red(figlet.textSync(text, {
     font: 'Ghost',
     horizontalLayout: 'default',
     verticalLayout: 'default',
     width: 160,
     whitespaceBreak: true,
-  }));
+  })));
 }
 
 async function showCitizen(id) {
@@ -126,16 +126,20 @@ async function showCitizen(id) {
 }
 
 async function loop() {
-  console.clear();
+  try {
+    console.clear();
 
-  if (citizenId !== null) {
-    await showCitizen(citizenId);
-    citizenId = null;
-  } else {
-    console.log(await terminalImage.file('./edm.jpg'));
+    if (citizenId !== null) {
+      await showCitizen(citizenId);
+      citizenId = null;
+    } else {
+      console.log(await terminalImage.file('edm.jpg'));
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+  } catch (error) {
+    // empty
   }
-
-  await new Promise((resolve) => setTimeout(resolve, 4000));
   loop();
 }
 
