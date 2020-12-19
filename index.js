@@ -2,11 +2,14 @@ const figlet = require('figlet');
 const noble = require('@abandonware/noble');
 const bleno = require('./index');
 const terminalImage = require('terminal-image');
+const { request } = require('graphql-request');
 
 const EXPECTED_MANUFACTURER_DATA_LENGTH = 25;
 const APPLE_COMPANY_IDENTIFIER = 0x004c; // https://www.bluetooth.org/en-us/specification/assigned-numbers/company-identifiers
 const IBEACON_TYPE = 0x02;
 const EXPECTED_IBEACON_DATA_LENGTH = 0x15;
+
+let citizenId = null;
 
 noble.on('stateChange', function(state) {
   console.log('on -> stateChange: ' + state);
@@ -56,24 +59,82 @@ noble.on('discover', (peripheral) => {
     bleacon.proximity = proximity;
 
     console.log(bleacon);
+
+    citizenId = minor;
   }
 });
 
 function showText(text) {
-  figlet.text(text, {
+  console.log(figlet.textSync(text, {
     font: 'Ghost',
     horizontalLayout: 'default',
     verticalLayout: 'default',
-    width: 80,
-    whitespaceBreak: true
-  }, function(err, data) {
-    console.log(data);
-  });
+    width: 160,
+    whitespaceBreak: true,
+  }));
+}
+
+async function showCitizen(id) {
+  try {
+    const data = await request('https://uitc.pominwu.org/', `
+      query {
+        citizen(id: "${id}") {
+          id
+          name
+          infections {
+            pathogen {
+              name
+              version
+              spreadDistanceInMeters
+              spreadTimeInSeconds
+              spreadRatio
+            }
+            infectedAt
+          }
+          vaccinations {
+            vaccine {
+              name
+              version
+              generates { name }
+              effectiveAfterSeconds
+            }
+            adminedAt
+          }
+          immunities {
+            antibody {
+              name
+              version
+              expiresInSeconds
+            }
+            expiresAt
+          }
+          photo {
+            id
+            url
+            size
+            thumbnail { url }
+          }
+        }
+      }
+    `);
+  
+    showText(data.citizen.name);
+  } catch (err) {
+    showText('Not Found');
+    // empty
+  }
 }
 
 async function loop() {
   console.clear();
-  console.log(await terminalImage.file('./edm.jpg'));
+
+  if (citizenId !== null) {
+    await showCitizen(citizenId);
+    citizenId = null;
+  } else {
+    console.log(await terminalImage.file('./edm.jpg'));
+  }
+
   await new Promise((resolve) => setTimeout(resolve, 4000));
   loop();
 }
