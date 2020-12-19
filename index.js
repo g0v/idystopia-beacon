@@ -1,3 +1,4 @@
+const figlet = require('figlet');
 const noble = require('@abandonware/noble');
 const bleno = require('./index');
 const terminalImage = require('terminal-image');
@@ -58,8 +59,23 @@ noble.on('discover', (peripheral) => {
   }
 });
 
-console.clear();
+function showText(text) {
+  figlet.text(text, {
+    font: 'Ghost',
+    horizontalLayout: 'default',
+    verticalLayout: 'default',
+    width: 80,
+    whitespaceBreak: true
+  }, function(err, data) {
+    console.log(data);
+  });
+}
 
-(async () => {
-  console.log(await terminalImage.file('edm.jpg'));
-})();
+async function loop() {
+  console.clear();
+  console.log(await terminalImage.file('./edm.jpg'));
+  await new Promise((resolve) => setTimeout(resolve, 4000));
+  loop();
+}
+
+loop();
