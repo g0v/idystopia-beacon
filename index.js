@@ -136,7 +136,7 @@ async function loop() {
       await showCitizen(citizenId);
       citizenId = null;
     } else {
-      // console.log(await terminalImage.file('edm.jpg'));
+      console.log(await terminalImage.file('edm.jpg'));
     }
 
     await new Promise((resolve) => setTimeout(resolve, 4000));
